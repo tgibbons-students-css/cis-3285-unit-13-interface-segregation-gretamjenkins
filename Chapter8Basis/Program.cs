@@ -17,17 +17,20 @@ namespace Chapter8Basis
             orderObj.id = Guid.NewGuid();
             orderObj.product = "Nutcracker";
             orderObj.amount = 4;
-            Console.WriteLine(orderObj.ToStiring());
 
             Console.WriteLine("=========CreateSeparateServices=========");
             OrderController sep = CreateSeparateServices();
+            sep.CreateOrder(orderObj);            // save order to database
+            sep.DeleteOrder(orderObj);            // delete order from database
 
             Console.WriteLine("=========CreateSingleService=========");
             OrderController sing = CreateSingleService();
+            sing.CreateOrder(orderObj);            // save order to database
+            sing.DeleteOrder(orderObj);            // delete order from database
 
             Console.WriteLine("=========GenericController<Order>=========");
             GenericController<Order> generic = CreateGenericServices();
-
+            generic.CreateEntity(orderObj);
 
             Console.WriteLine("Hit any key to quit");
             Console.ReadKey();
