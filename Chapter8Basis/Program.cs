@@ -13,7 +13,11 @@ namespace Chapter8Basis
     {
         static void Main(string[] args)
         {
-
+            Order orderObj = new Order();
+            orderObj.id = Guid.NewGuid();
+            orderObj.product = "Nutcracker";
+            orderObj.amount = 4;
+            Console.WriteLine(orderObj.ToStiring());
 
             Console.WriteLine("=========CreateSeparateServices=========");
             OrderController sep = CreateSeparateServices();

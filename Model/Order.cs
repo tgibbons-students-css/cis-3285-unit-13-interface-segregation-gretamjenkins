@@ -12,5 +12,10 @@ namespace Model
         public Guid id { get; set; }
         public string product { get; set; }
         public int amount { get; set; }
+
+        public string ToStiring() {
+            return "You have ordered " + amount + product + "s with id " + id;
+        }
+        
     }
 }
