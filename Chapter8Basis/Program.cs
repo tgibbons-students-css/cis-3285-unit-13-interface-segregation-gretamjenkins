@@ -18,6 +18,10 @@ namespace Chapter8Basis
             orderObj.product = "Nutcracker";
             orderObj.amount = 4;
 
+            Item itemObj = new Item();
+            itemObj.product = "Ornament";
+            itemObj.cost = 10;
+
             Console.WriteLine("=========CreateSeparateServices=========");
             OrderController sep = CreateSeparateServices();
             sep.CreateOrder(orderObj);            // save order to database
@@ -28,9 +32,18 @@ namespace Chapter8Basis
             sing.CreateOrder(orderObj);            // save order to database
             sing.DeleteOrder(orderObj);            // delete order from database
 
+            Console.WriteLine("=========CreateSeparateItemServices=========");
+            ItemController sepItm = CreateSeparateItemServices();
+            sepItm.CreateItem(itemObj);            // save order to database
+            sepItm.DeleteItem(itemObj);            // delete order from database
+
             Console.WriteLine("=========GenericController<Order>=========");
-            GenericController<Order> generic = CreateGenericServices();
-            generic.CreateEntity(orderObj);
+            GenericController<Order> genericOrder = CreateGenericOrderServices();
+            genericOrder.CreateEntity(orderObj);
+
+            Console.WriteLine("=========GenericController<Item>=========");
+            GenericController<Item> genericItem = CreateGenericItemServices();
+            genericItem.CreateEntity(itemObj);
 
             Console.WriteLine("Hit any key to quit");
             Console.ReadKey();
@@ -50,7 +63,15 @@ namespace Chapter8Basis
             return new OrderController(crud, crud, crud);
         }
 
-        static GenericController<Order> CreateGenericServices()
+        static ItemController CreateSeparateItemServices()
+        {
+            var reader = new Reader<Item>();
+            var saver = new Saver<Item>();
+            var deleter = new Deleter<Item>();
+            return new ItemController(reader, saver, deleter);
+        }
+
+        static GenericController<Order> CreateGenericOrderServices()
         {
             var reader = new Reader<Order>();
             var saver = new Saver<Order>();
@@ -62,5 +83,16 @@ namespace Chapter8Basis
             return ctl;
         }
 
+        static GenericController<Item> CreateGenericItemServices()
+        {
+            var reader = new Reader<Item>();
+            var saver = new Saver<Item>();
+            var deleter = new Deleter<Item>();
+            // This must be declared using reflection...
+            GenericController<Item> ctl = (GenericController<Item>)Activator.CreateInstance(typeof(GenericController<Item>), reader, saver, deleter);
+            //This does not work 
+            //GenericController<Order> ctl = new GenericController(reader, saver, deleter);
+            return ctl;
+        }
     }
 }
