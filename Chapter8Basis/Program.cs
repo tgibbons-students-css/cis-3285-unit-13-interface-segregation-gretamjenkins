@@ -38,11 +38,15 @@ namespace Chapter8Basis
             sepItm.DeleteItem(itemObj);            // delete order from database
 
             Console.WriteLine("=========GenericController<Order>=========");
-            GenericController<Order> genericOrder = CreateGenericOrderServices();
+            // New "factory" type class to handle any type of entity
+            GenericControllerServices<Order> genericServices = new GenericControllerServices<Order>();
+            GenericController<Order> genericOrder = genericServices.CreateGenericTEntityServices();
             genericOrder.CreateEntity(orderObj);
 
             Console.WriteLine("=========GenericController<Item>=========");
-            GenericController<Item> genericItem = CreateGenericItemServices();
+            // New "factory" type class to handle any type of entity
+            GenericControllerServices<Item> genericItemServices = new GenericControllerServices<Item>();
+            GenericController<Item> genericItem = genericItemServices.CreateGenericTEntityServices();
             genericItem.CreateEntity(itemObj);
 
             Console.WriteLine("Hit any key to quit");
@@ -69,30 +73,6 @@ namespace Chapter8Basis
             var saver = new Saver<Item>();
             var deleter = new Deleter<Item>();
             return new ItemController(reader, saver, deleter);
-        }
-
-        static GenericController<Order> CreateGenericOrderServices()
-        {
-            var reader = new Reader<Order>();
-            var saver = new Saver<Order>();
-            var deleter = new Deleter<Order>();
-            // This must be declared using reflection...
-            GenericController<Order> ctl = (GenericController<Order>)Activator.CreateInstance(typeof(GenericController<Order>), reader, saver, deleter);
-            //This does not work 
-            //GenericController<Order> ctl = new GenericController(reader, saver, deleter);
-            return ctl;
-        }
-
-        static GenericController<Item> CreateGenericItemServices()
-        {
-            var reader = new Reader<Item>();
-            var saver = new Saver<Item>();
-            var deleter = new Deleter<Item>();
-            // This must be declared using reflection...
-            GenericController<Item> ctl = (GenericController<Item>)Activator.CreateInstance(typeof(GenericController<Item>), reader, saver, deleter);
-            //This does not work 
-            //GenericController<Order> ctl = new GenericController(reader, saver, deleter);
-            return ctl;
         }
     }
 }
